@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<!--suppress ALL-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" th:src="@{js/jquery-1.8.3.min.js}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var k=$("#cha").attr("qqq")
+//            使用时看第几行需要变，从0开始
+            $("tr:odd").css("background","grey")
+           $("#trr").css("background","white")
+            $.ajax({
+                type:"GET",//请求类型
+                url:"/get",//请求的url
+                dataType:"json",//ajax接口（请求url）返回的数据类型
+                success:function(data){//data：返回数据（json对象）
+                    $("#a").append(data[0].name)
+                    $("#b").append(data[1].name)
+                    $("#c").append(data[2].name)
+                    $("#d").append(data[3].name)
+                    $("#e").append(data[4].name)
+                    if(k==0){
+                    }else if (k==1){
+                        $("#a").attr("selected","selected")
+                    }else if (k==2){
+                        $("#b").attr("selected","selected")
+                    }else if (k==3){
+                        $("#c").attr("selected","selected")
+                    }else if (k==4){
+                        $("#d").attr("selected","selected")
+                    }else if (k==5){
+                        $("#e").attr("selected","selected")
+                    }
+
+                },
+                error:function(data){//当访问时候，404，500 等非200的错误状态码
+                   alert("xxx")
+                }
+            })
+            $("#cha").click(function () {
+                var a=$("#sel").val()
+                window.location.href="/getAll?name="+a
+            })
+//            $("#jh").onclick(a())
+//            $("#dj").onclick(a())
+            $(".jh").click(function () {
+                var u=confirm("确定激活健身卡么")
+                if(u==true){
+                    var obj=$(this)
+                    $.ajax({
+                        type:"GET",//请求类型
+                        url:"/update",//请求的url
+                        data:{id:obj.attr("jid"),status:obj.attr("status")},
+                        dataType:"json",//ajax接口（请求url）返回的数据类型
+                        success:function(data){//data：返回数据（json对象）
+                            window.location.href="/getAll?name="+obj.attr("qqq")
+                        },
+                        error:function(data){//当访问时候，404，500 等非200的错误状态码
+                            alert("xxx")
+                        }
+                    })
+                }
+
+            })
+            $(".dj").click(function () {
+                var q=confirm("确定冻结健身卡么")
+                if(q==true){
+                    var obj=$(this)
+                    alert(obj.attr("jid"))
+                    $.ajax({
+                        type:"GET",//请求类型
+                        url:"/update",//请求的url
+                        data:{id:obj.attr("jid"),status:obj.attr("status")},
+                        dataType:"json",//ajax接口（请求url）返回的数据类型
+                        success:function(data){//data：返回数据（json对象）a
+                            window.location.href="/getAll?name="+obj.attr("qqq")
+                        },
+                        error:function(data){//当访问时候，404，500 等非200的错误状态码
+                            alert("xxx")
+                        }
+                    })
+                }
+
+            })
+
+        })
+    </script>
+</head>
+
+<body>
+    <table>
+        <tr ><td th:align="center" th:colspan="7"><h1>健身房会员卡管理系统</h1></td></tr>
+        <tr id="trr">
+            <td th:align="center" th:colspan="7">
+                <select id="sel">
+                    <option th:value="0">---请选择---</option>
+                    <option th:value="1" id="a"></option>
+                    <option th:value="2" id="b"></option>
+                    <option th:value="3" id="c"></option>
+                    <option th:value="4" id="d"></option>
+                    <option th:value="5" id="e"></option>
+                </select>
+                <a href="javascript:void(0)" id="cha" th:qqq="${name}">查询</a>
+                <!--<input type="submit">-->
+                <!--如果这里是用的form表单，我们可以根据name属性获取到select的值，然后在action里面加入值-->
+            </td>
+        </tr>
+        <tr>
+            <td><a href="/toadd">办卡</a></td>
+        </tr>
+        <tr>
+            <td th:align="center">持卡人姓名</td>
+            <td th:align="center">手机号</td>
+            <td th:align="center">卡类型</td>
+            <td th:align="center">卡状态</td>
+            <td th:align="center">卡内余额</td>
+            <td th:align="center">开卡日期</td>
+            <td th:align="center">操作</td>
+            <td th:align="center">操作</td>
+        </tr>
+        <tr th:each="t:${gymlist}">
+            <td th:text="${t.user_Name}"></td>
+            <td th:text="${t.phone}"></td>
+            <td th:text="${t.card_type.name}"/>
+            <td class="wb"><span th:if="${t.status==1}" class="q">激活</span>
+                <span th:if="${t.status==0}" class="w">冻结</span>
+            </td>
+
+
+            <td th:text="${t.balance}"></td>
+            <td th:text="${t.open_Date}"></td>
+            <td class="cz">
+                <a th:if="${t.status}==0" href="javascript:void(0)" class="jh" style="color: red" th:jid="${t.id}" th:status="${t.status}" th:qqq="${name}" onclick="">激活</a>
+                <a th:if="${t.status}==1" href="javascript:void(0)" class="dj" th:jid="${t.id}" th:status="${t.status}" th:qqq="${name}">冻结</a>
+            </td>
+            <td>
+                <a th:href="@{/delete(id=${t.id})}">删除</a>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

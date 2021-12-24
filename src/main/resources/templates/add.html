@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<!--suppress ALL-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" th:src="@{js/jquery-1.8.3.min.js}">
+    </script>
+    <script type="text/javascript">
+//        $(document).ready(function () {
+            function qqq() {
+                if(a()&b()&c()&d()&f()){
+                    return true
+                }else {
+                    return false
+                }
+            }
+//            $("#tj").click(function () {
+//                if(a()&b()&c()&d()&f()){
+//                    return true
+//                }else {
+//                    return false
+//                }
+//            })
+            function a() {
+                var a=$("#name").val()
+                if(a==null){
+                    alert("姓名不能为空")
+                    return false
+                }else {
+                    return true
+                }
+            }
+            function b() {
+                var b=$("#phone").val()
+                if(b==null){
+                    alert("电话不能为空")
+                    return false
+                }else {
+                    return true
+                }
+            }
+            function c() {
+                var c=$("#lx").val()
+                if(c==0){
+                    alert("请选择健身卡类型")
+                    return false
+                }else {
+                    return true
+                }
+            }
+            function d() {
+                var d=$("#ye").val()
+                if(d==""){
+                    alert("钱不能为空")
+                    return false
+                }else {
+                    return true
+                }
+            }
+            function f() {
+                var e = $("#rq").val()
+                var DATE_FORMAT = /^[0-9]{4}-[0-1]?[0-9]{1}-[0-3]?[0-9]{1}$/;
+                if(DATE_FORMAT.test(e)){
+                    return true
+                } else {
+                    alert("抱歉，您输入的日期格式有误(或请输入日期)，正确格式应为YYYY-MM-DD")
+                    return false
+                }
+            }
+//        })
+
+    </script>
+</head>
+<body>
+<form method="post" action="/add" >
+    <table th:border="1">
+        <tr><td colspan="2"><h1>添加健身卡信息</h1></td></tr>
+        <tr><td>持卡人姓名（*）</td><td><input type="text" name="user_Name" id="name"></td></tr>
+        <tr><td>手机号（*）</td><td><input type="text" name="phone" id="phone"></td></tr>
+        <tr><td>健身卡类型（*）</td><td>
+            <select name="card_Type_Id" id="lx">
+            <option value="0">---请选择---</option>
+            <option value="1">计次卡</option>
+            <option value="2">储值卡</option>
+            <option value="3">时段卡</option>
+            <option value="4">私教卡</option>
+            <option value="5">体验卡</option>
+            </select>
+            </td>
+        </tr>
+        <tr><td>卡内余额（*）</td><td><input type="text" name="balance" id="ye"></td></tr>
+        <tr>
+            <td>开卡日期（*）</td><td><input type="text" name="open_Date" id="rq"></td>
+            <td><input type="hidden" name="status" value="0"></td>
+        </tr>
+<!--可以单击提交，可以用onclick 可以用 onsubmit return a（）函数,后面两种方法 onclick放在单机按钮上，submit放在action上（不能放在某个函数里面否则不能被获取到） -->
+        <tr><td th:colspan="2" th:align="center"><input type="submit" value="提交" id="tj" onclick="return qqq()"></td></tr>
+    </table>
+</form>
+</body>
+</html>

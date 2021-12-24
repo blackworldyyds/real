@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bjit.gymsystem.mapper.Gym_CardMapper">
+    <resultMap id="get" type="Gym_Card">
+        <id property="id" column="id"></id>
+        <result property="user_Name" column="user_name"></result>
+        <result property="card_Type_Id" column="card_type_id"></result>
+        <result property="status" column="status"></result>
+        <result property="balance" column="balance"></result>
+        <result property="open_Date" column="open_date"></result>
+        <result property="phone" column="phone"></result>
+        <association property="card_type" javaType="card_type">
+            <id property="id" column="id"></id>
+            <result property="name" column="name"></result>
+        </association>
+    </resultMap>
+
+    <select id="getAll" resultMap="get">
+        SELECT * FROM card_type c,gym_card g WHERE c.id=g.card_type_id
+        <if test="card_type_id!=null and card_type_id!=0">
+            and g.card_type_id=#{card_type_id}
+        </if>
+    </select>
+    <insert id="add" parameterType="Gym_Card">
+        insert INTO gym_card VALUES (0,#{user_Name},#{card_Type_Id},#{status},#{balance},#{open_Date},#{phone})
+    </insert>
+    <update id="update">
+
+         <if test="status==1">
+             UPDATE gym_card SET status=0 WHERE id=#{id}
+         </if>
+        <if test="status==0">
+            UPDATE gym_card SET status=1 WHERE id=#{id}
+        </if>
+
+    </update>
+    <select id="sta" resultType="Gym_Card">
+        select status from gym_card
+    </select>
+
+</mapper>
